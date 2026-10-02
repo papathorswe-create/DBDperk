@@ -6,7 +6,8 @@ const PERK_LISTS = {
 const STORAGE_KEYS = {
   survivor: "perkele-selected-survivor",
   killer: "perkele-selected-killer",
-  role: "perkele-role"
+  role: "perkele-role",
+  emptyChance: "perkele-empty-chance"
 };
 
 let currentRole = localStorage.getItem(STORAGE_KEYS.role) || "survivor";
@@ -33,6 +34,13 @@ const rollHint = document.getElementById("rollHint");
 const emptyState = document.getElementById("emptyState");
 const resultPanel = document.getElementById("resultPanel");
 const results = document.getElementById("results");
+const emptyChance = document.getElementById("emptyChance");
+const emptyChanceValue = document.getElementById("emptyChanceValue");
+const generateUrlBtn = document.getElementById("generateUrlBtn");
+const previewBtn = document.getElementById("previewBtn");
+const urlBox = document.getElementById("urlBox");
+const obsUrl = document.getElementById("obsUrl");
+const copyUrlBtn = document.getElementById("copyUrlBtn");
 
 function parsePerkList(text) {
   return text
@@ -65,7 +73,6 @@ function loadSavedSelections(role) {
     console.warn("Could not read saved perk selection.", error);
   }
 
-  // First visit: select every perk by default.
   selected[role] = new Set(perkData[role]);
 }
 
@@ -86,6 +93,7 @@ function setRole(role) {
   localStorage.setItem(STORAGE_KEYS.role, role);
   perkSearch.value = "";
   resultPanel.classList.add("hidden");
+  urlBox.classList.add("hidden");
   updateRoleButtons();
   renderPerks();
 }
@@ -98,6 +106,9 @@ function updateCounts() {
   totalCount.textContent = total;
 
   rollBtn.disabled = chosen < 4;
+  generateUrlBtn.disabled = chosen < 4;
+  previewBtn.disabled = chosen < 4;
+
   rollHint.textContent =
     chosen < 4
       ? "Select at least 4 perks."
@@ -135,6 +146,7 @@ function renderPerks() {
 
       label.classList.toggle("selected", checkbox.checked);
       saveSelections(currentRole);
+      urlBox.classList.add("hidden");
       updateCounts();
     });
 
@@ -154,6 +166,7 @@ function selectAllVisible() {
     .forEach(perk => selected[currentRole].add(perk));
 
   saveSelections(currentRole);
+  urlBox.classList.add("hidden");
   renderPerks();
 }
 
@@ -165,6 +178,7 @@ function clearAllVisible() {
     .forEach(perk => selected[currentRole].delete(perk));
 
   saveSelections(currentRole);
+  urlBox.classList.add("hidden");
   renderPerks();
 }
 
@@ -182,9 +196,7 @@ function shuffle(items) {
 function rollPerkele() {
   const pool = [...selected[currentRole]];
 
-  if (pool.length < 4) {
-    return;
-  }
+  if (pool.length < 4) return;
 
   const chosen = shuffle(pool).slice(0, 4);
 
@@ -200,6 +212,70 @@ function rollPerkele() {
   resultPanel.classList.remove("hidden");
 }
 
+function encodeSelection(role) {
+  const all = perkData[role];
+  const bits = all.map(perk => selected[role].has(perk) ? "1" : "0").join("");
+
+  let hex = "";
+  for (let i = 0; i < bits.length; i += 4) {
+    const nibble = bits.slice(i, i + 4).padEnd(4, "0");
+    hex += parseInt(nibble, 2).toString(16);
+  }
+
+  return hex;
+}
+
+function buildOverlayUrl() {
+  const url = new URL("overlay.html", window.location.href);
+
+  url.searchParams.set("role", currentRole);
+  url.searchParams.set("pool", encodeSelection(currentRole));
+  url.searchParams.set("empty", emptyChance.value);
+
+  return url.toString();
+}
+
+function generateOverlayUrl() {
+  if (selected[currentRole].size < 4) return;
+
+  obsUrl.value = buildOverlayUrl();
+  urlBox.classList.remove("hidden");
+}
+
+function previewOverlay() {
+  if (selected[currentRole].size < 4) return;
+  window.open(buildOverlayUrl(), "_blank", "noopener,noreferrer");
+}
+
+async function copyOverlayUrl() {
+  if (!obsUrl.value) return;
+
+  try {
+    await navigator.clipboard.writeText(obsUrl.value);
+    const previous = copyUrlBtn.textContent;
+    copyUrlBtn.textContent = "Copied!";
+    setTimeout(() => copyUrlBtn.textContent = previous, 1200);
+  } catch {
+    obsUrl.select();
+    document.execCommand("copy");
+  }
+}
+
+function setupEmptyChance() {
+  const saved = localStorage.getItem(STORAGE_KEYS.emptyChance);
+  if (saved !== null) {
+    emptyChance.value = saved;
+  }
+
+  emptyChanceValue.textContent = emptyChance.value;
+
+  emptyChance.addEventListener("input", () => {
+    emptyChanceValue.textContent = emptyChance.value;
+    localStorage.setItem(STORAGE_KEYS.emptyChance, emptyChance.value);
+    urlBox.classList.add("hidden");
+  });
+}
+
 async function initialise() {
   try {
     [perkData.survivor, perkData.killer] = await Promise.all([
@@ -210,13 +286,16 @@ async function initialise() {
     loadSavedSelections("survivor");
     loadSavedSelections("killer");
 
+    setupEmptyChance();
     updateRoleButtons();
     renderPerks();
   } catch (error) {
     console.error(error);
     perkGrid.innerHTML =
-      '<p class="empty-state">Could not load the perk files. Run this folder through a local web server rather than opening index.html directly.</p>';
+      '<p class="empty-state">Could not load the perk files.</p>';
     rollBtn.disabled = true;
+    generateUrlBtn.disabled = true;
+    previewBtn.disabled = true;
   }
 }
 
@@ -226,5 +305,8 @@ perkSearch.addEventListener("input", renderPerks);
 selectAllBtn.addEventListener("click", selectAllVisible);
 clearAllBtn.addEventListener("click", clearAllVisible);
 rollBtn.addEventListener("click", rollPerkele);
+generateUrlBtn.addEventListener("click", generateOverlayUrl);
+previewBtn.addEventListener("click", previewOverlay);
+copyUrlBtn.addEventListener("click", copyOverlayUrl);
 
 initialise();

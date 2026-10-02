@@ -51,11 +51,19 @@ button {
   letter-spacing: 0.28em;
 }
 
+.eyebrow.left {
+  text-align: left;
+}
+
 h1 {
   margin: 0;
   font-size: clamp(3rem, 9vw, 6rem);
   line-height: 0.95;
   letter-spacing: 0.04em;
+}
+
+h2 {
+  margin: 4px 0 8px;
 }
 
 .subtitle {
@@ -98,7 +106,9 @@ h1 {
 }
 
 .segmented,
-.button-row {
+.button-row,
+.obs-actions,
+.url-row {
   display: flex;
   gap: 8px;
 }
@@ -122,7 +132,8 @@ h1 {
   border-color: #515160;
 }
 
-input[type="search"] {
+input[type="search"],
+input[type="text"] {
   width: 100%;
   border: 1px solid var(--line);
   background: #0e0e13;
@@ -132,7 +143,8 @@ input[type="search"] {
   outline: none;
 }
 
-input[type="search"]:focus {
+input[type="search"]:focus,
+input[type="text"]:focus {
   border-color: var(--accent);
 }
 
@@ -208,6 +220,58 @@ input[type="search"]:focus {
 
 .hidden {
   display: none !important;
+}
+
+.obs-panel {
+  margin-top: 14px;
+}
+
+.obs-copy p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+}
+
+.obs-settings {
+  max-width: 520px;
+  margin-top: 20px;
+}
+
+.obs-settings label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.obs-settings input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.obs-actions {
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.big-secondary {
+  padding-inline: 24px;
+}
+
+.url-box {
+  margin-top: 18px;
+}
+
+.url-row {
+  margin-top: 8px;
+}
+
+.url-row input {
+  flex: 1;
+}
+
+.tiny-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
 .roll-zone {
@@ -289,5 +353,9 @@ footer {
 
   .results {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .url-row {
+    flex-direction: column;
   }
 }

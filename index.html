@@ -56,8 +56,43 @@
       <p id="emptyState" class="empty-state hidden">No perks match that search.</p>
     </section>
 
+    <section class="panel obs-panel">
+      <div class="obs-copy">
+        <p class="eyebrow left">OBS BROWSER SOURCE</p>
+        <h2>Generate your overlay</h2>
+        <p>
+          Your selected perks are encoded directly into the URL.
+          No account or server-side save is required.
+        </p>
+      </div>
+
+      <div class="obs-settings">
+        <label for="emptyChance">
+          <span>No Perk chance</span>
+          <strong><span id="emptyChanceValue">12</span>%</strong>
+        </label>
+        <input id="emptyChance" type="range" min="0" max="50" value="12" step="1">
+      </div>
+
+      <div class="obs-actions">
+        <button id="generateUrlBtn" class="roll-btn">GENERATE OBS URL</button>
+        <button id="previewBtn" class="secondary big-secondary">PREVIEW OVERLAY</button>
+      </div>
+
+      <div id="urlBox" class="url-box hidden">
+        <label class="label" for="obsUrl">Your Browser Source URL</label>
+        <div class="url-row">
+          <input id="obsUrl" type="text" readonly>
+          <button id="copyUrlBtn" class="secondary">Copy URL</button>
+        </div>
+        <p class="tiny-note">
+          Add this URL as an OBS Browser Source. Refresh the source whenever you want a new roll.
+        </p>
+      </div>
+    </section>
+
     <section class="roll-zone">
-      <button id="rollBtn" class="roll-btn">ROLL PERKELE</button>
+      <button id="rollBtn" class="roll-btn">TEST ROLL HERE</button>
       <p id="rollHint">Select at least 4 perks.</p>
 
       <div id="resultPanel" class="result-panel hidden">
