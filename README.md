@@ -1,39 +1,35 @@
 # DBDperk / Perkele
 
-Public Dead by Daylight perk roulette by PapaThorSwe.
+A small Dead by Daylight perk roulette I made for stream.
 
-## Current features
+The idea is simple:
+pick Survivor or Killer, select the perks you actually own, then let Perkele decide the build.
 
-- Survivor / Killer selection
-- Searchable perk checklists
-- Saved perk ownership selections using browser localStorage
-- Configurable NO PERK chance
-- Generated OBS Browser Source URL
-- Dedicated transparent OBS overlay
-- Robust cycling-style perk roulette animation
-- Staggered slot stops
-- Fourth-slot betrayal fake-out
-- Automatic result text
-- Automatic hide after result display
-- Perk selection encoded into the URL
-- No account, database, or paid backend required
+There is also an OBS version, so streamers can generate a browser source and use it directly on stream.
 
-## OBS usage
+## What it does
 
-1. Open the main Perkele page.
-2. Choose Survivor or Killer.
-3. Select the perks you own.
-4. Set the NO PERK chance.
-5. Click GENERATE OBS URL.
-6. Copy the URL.
-7. Add it to OBS as a Browser Source.
-8. Refresh that Browser Source whenever you want a new roll.
+- Survivor / Killer perk pools
+- Search and perk checkboxes
+- Remembers your selected perks in the browser
+- Adjustable NO PERK chance
+- Generates an OBS browser source URL
+- Random 4 perk loadout
+- Staggered rolls
+- Fourth slot betrayal fake-out
+- Auto hides after showing the result
 
-## Version 3.1
+No login, database or backend needed.
 
-v3.1 replaces the fragile reel-position animation from v3 with a safer
-image-cycling animation. The visual result still behaves like a roulette,
-but no longer depends on measuring and translating a long reel track.
+## OBS
 
-It also shows a visible PERKELE ERROR state if the overlay fails, making
-future debugging much easier.
+1. Pick Survivor or Killer.
+2. Select the perks you own.
+3. Set the NO PERK chance.
+4. Generate the OBS URL.
+5. Add that URL as a Browser Source.
+6. Refresh the browser source whenever you want a new roll.
+
+Perk images are currently loaded from papathorswe.se.
+
+Made by PapaThorSwe.

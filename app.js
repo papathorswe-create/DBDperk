@@ -1,3 +1,5 @@
+// Perkele setup page - PapaThorSwe
+
 const PERK_LISTS = {
   survivor: "data/survivor-perks.txt",
   killer: "data/killer-perks.txt"

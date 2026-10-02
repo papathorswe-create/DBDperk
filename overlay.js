@@ -1,3 +1,5 @@
+// Perkele OBS overlay - PapaThorSwe
+
 const PERKELE_SETTINGS = {
   perkLists: {
     survivor: "data/survivor-perks.txt",
@@ -77,7 +79,7 @@ async function loadPerkList(role) {
 
   if (!response.ok) {
     throw new Error(
-      "Could not load " + role + " perk list. HTTP " + response.status
+      "Could not load perk list (" + response.status + ")"
     );
   }
 
@@ -468,12 +470,12 @@ function showFatalError(error) {
 
   roleText.textContent = "PERKELE ERROR";
   status.textContent =
-    "THE ENTITY ATE THE OVERLAY.";
+    "Something broke. Perkele is having a moment.";
 
   footer.textContent =
     error && error.message
       ? error.message
-      : "Unknown overlay error.";
+      : "Unknown error.";
 }
 
 async function runPerkele() {
