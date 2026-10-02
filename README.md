@@ -33,3 +33,16 @@ No login, database or backend needed.
 Perk images are currently loaded from papathorswe.se.
 
 Made by PapaThorSwe.
+
+
+## Perk list updates
+
+The app first tries to load the perk lists from:
+
+- https://papathorswe.se/perks/survivor-perks.txt
+- https://papathorswe.se/perks/killer-perks.txt
+
+If those cannot be reached, it falls back to the copies in the GitHub repo.
+
+So normally, adding new perks to the two TXT files on papathorswe.se is enough.
+The Available perk count updates automatically from however many lines are in the list.

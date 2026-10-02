@@ -1,8 +1,14 @@
 // Perkele setup page - PapaThorSwe
 
 const PERK_LISTS = {
-  survivor: "data/survivor-perks.txt",
-  killer: "data/killer-perks.txt"
+  survivor: {
+    primary: "https://papathorswe.se/perks/survivor-perks.txt",
+    fallback: "data/survivor-perks.txt"
+  },
+  killer: {
+    primary: "https://papathorswe.se/perks/killer-perks.txt",
+    fallback: "data/killer-perks.txt"
+  }
 };
 
 const STORAGE_KEYS = {
@@ -52,13 +58,28 @@ function parsePerkList(text) {
 }
 
 async function loadPerkList(role) {
-  const response = await fetch(PERK_LISTS[role], { cache: "no-store" });
+  const sources = [
+    PERK_LISTS[role].primary,
+    PERK_LISTS[role].fallback
+  ];
 
-  if (!response.ok) {
-    throw new Error(`Could not load ${role} perk list.`);
+  for (const source of sources) {
+    try {
+      const response = await fetch(source, { cache: "no-store" });
+
+      if (!response.ok) continue;
+
+      const perks = parsePerkList(await response.text());
+
+      if (perks.length >= 4) {
+        return perks;
+      }
+    } catch (error) {
+      console.warn("Could not load perk list from:", source);
+    }
   }
 
-  return parsePerkList(await response.text());
+  throw new Error(`Could not load ${role} perk list.`);
 }
 
 function loadSavedSelections(role) {
