@@ -11,15 +11,13 @@ const PERKELE_SETTINGS = {
 
   noPerkImage: "https://papathorswe.se/perks/no-perk.png",
 
-  // Chance that slot 4 fake-outs on a real perk before dropping to NO PERK.
   betrayalChance: 0.55,
 
   firstStopDelay: 1750,
   delayBetweenStops: 470,
-  spinItemCount: 20,
-  betrayalPause: 330,
+  spinInterval: 90,
+  betrayalPause: 420,
 
-  // Overlay hides after the completed result has been shown for this long.
   resultDisplayTime: 18000,
 
   emptyFooterText: "PERKELE! THE ENTITY TOOK A PERK."
@@ -43,10 +41,14 @@ const EMPTY_CHANCE =
 let perkeleRunId = 0;
 let perkeleHideTimer = null;
 let perkeleTimeouts = [];
+let perkeleIntervals = [];
 
 function clearPerkeleTimers() {
   perkeleTimeouts.forEach(timer => clearTimeout(timer));
   perkeleTimeouts = [];
+
+  perkeleIntervals.forEach(timer => clearInterval(timer));
+  perkeleIntervals = [];
 
   if (perkeleHideTimer) {
     clearTimeout(perkeleHideTimer);
@@ -75,7 +77,7 @@ async function loadPerkList(role) {
 
   if (!response.ok) {
     throw new Error(
-      "Could not load " + role + " perk list."
+      "Could not load " + role + " perk list. HTTP " + response.status
     );
   }
 
@@ -165,86 +167,22 @@ function chooseFinalResults(perkPool) {
   return results;
 }
 
-function createReelItem(role, result) {
-  const item = document.createElement("div");
-  item.className = "reel-item";
-
-  if (result.isEmpty) {
-    item.classList.add("no-perk");
-  }
-
-  const image = document.createElement("img");
-  image.alt = result.name;
-  image.draggable = false;
-
-  image.src = result.isEmpty
-    ? PERKELE_SETTINGS.noPerkImage
-    : getPerkImage(role, result.name);
-
-  image.onerror = function () {
-    console.error(
-      "Could not load perk image:",
-      image.src,
-      "for",
-      result.name
-    );
-
-    image.style.visibility = "hidden";
-  };
-
-  item.appendChild(image);
-  return item;
-}
-
-function buildSpinSequence(
-  role,
-  perkPool,
-  finalResult,
-  useBetrayal
-) {
-  const sequence = [];
-  const fillerPool = shuffle(perkPool);
-
-  for (
-    let i = 0;
-    i < PERKELE_SETTINGS.spinItemCount;
-    i++
-  ) {
-    sequence.push({
-      name: fillerPool[i % fillerPool.length],
-      isEmpty: false
-    });
-  }
-
-  if (useBetrayal) {
-    sequence.push({
-      name: randomItem(perkPool),
-      isEmpty: false,
-      isTease: true
-    });
-
-    sequence.push(finalResult);
-  } else {
-    sequence.push(finalResult);
-  }
-
-  return sequence;
-}
-
 function resetSlot(slot) {
-  const track = slot.querySelector(".reel-track");
+  const image = slot.querySelector(".perk-image");
   const name = slot.querySelector(".perk-name");
 
   slot.classList.remove(
     "stopped",
     "empty-result",
     "betrayal-pause",
-    "betrayal-drop"
+    "betrayal-drop",
+    "spinning"
   );
 
-  track.style.transition = "none";
-  track.style.transform = "translateY(0)";
-  track.innerHTML = "";
+  image.removeAttribute("src");
+  image.alt = "";
+  image.style.visibility = "hidden";
+
   name.textContent = "";
 }
 
@@ -279,120 +217,65 @@ function setHeader(role) {
   footer.textContent = "";
 }
 
-function animateReel({
-  slot,
-  role,
-  perkPool,
-  finalResult,
-  stopDelay,
-  useBetrayal,
-  runId,
-  isLastSlot
-}) {
-  const track = slot.querySelector(".reel-track");
-  const nameLabel = slot.querySelector(".perk-name");
+function showPerkInSlot(slot, role, result) {
+  const image = slot.querySelector(".perk-image");
+  const name = slot.querySelector(".perk-name");
 
-  const sequence = buildSpinSequence(
-    role,
-    perkPool,
-    finalResult,
-    useBetrayal
-  );
+  image.style.visibility = "visible";
+  image.alt = result.name;
 
-  sequence.forEach(result => {
-    track.appendChild(
-      createReelItem(role, result)
+  image.src = result.isEmpty
+    ? PERKELE_SETTINGS.noPerkImage
+    : getPerkImage(role, result.name);
+
+  image.onerror = function () {
+    console.warn(
+      "Could not load perk image:",
+      image.src,
+      "for",
+      result.name
     );
-  });
+    image.style.visibility = "hidden";
+  };
 
-  const reelItems =
-    Array.from(
-      track.querySelectorAll(".reel-item")
+  name.textContent = result.name;
+}
+
+function startSlotSpinner(slot, role, perkPool, index) {
+  slot.classList.add("spinning");
+
+  let tick = index * 5;
+  const shuffled = shuffle(perkPool);
+
+  const interval = setInterval(() => {
+    const perk =
+      shuffled[tick % shuffled.length];
+
+    showPerkInSlot(
+      slot,
+      role,
+      {
+        name: perk,
+        isEmpty: false
+      }
     );
 
-  if (reelItems.length !== sequence.length) {
-    console.error(
-      "Could not measure all reel item positions."
-    );
-    return;
-  }
+    tick++;
+  }, PERKELE_SETTINGS.spinInterval);
 
-  const finalIndex = sequence.length - 1;
+  perkeleIntervals.push(interval);
+  return interval;
+}
 
-  const teaseIndex = useBetrayal
-    ? sequence.length - 2
-    : finalIndex;
-
-  const finalTarget =
-    -reelItems[finalIndex].offsetTop;
-
-  const teaseTarget =
-    -reelItems[teaseIndex].offsetTop;
-
-  track.style.transition = "none";
-  track.style.transform = "translateY(0)";
-
-  void track.offsetHeight;
-
-  const baseSpinDuration = stopDelay;
-
-  track.style.transition =
-    "transform " +
-    baseSpinDuration +
-    "ms cubic-bezier(.08,.72,.18,1)";
-
-  track.style.transform =
-    "translateY(" + teaseTarget + "px)";
-
-  if (useBetrayal) {
-    schedulePerkele(() => {
-      if (runId !== perkeleRunId) return;
-
-      slot.classList.add("betrayal-pause");
-    }, baseSpinDuration);
-
-    schedulePerkele(() => {
-      if (runId !== perkeleRunId) return;
-
-      slot.classList.remove("betrayal-pause");
-
-      track.style.transition =
-        "transform 280ms cubic-bezier(.2,.8,.25,1.1)";
-
-      track.style.transform =
-        "translateY(" + finalTarget + "px)";
-
-      slot.classList.add("betrayal-drop");
-    }, baseSpinDuration + PERKELE_SETTINGS.betrayalPause);
-
-    schedulePerkele(() => {
-      finishSlot(
-        slot,
-        nameLabel,
-        finalResult,
-        runId,
-        isLastSlot
-      );
-    },
-    baseSpinDuration +
-    PERKELE_SETTINGS.betrayalPause +
-    300);
-  } else {
-    schedulePerkele(() => {
-      finishSlot(
-        slot,
-        nameLabel,
-        finalResult,
-        runId,
-        isLastSlot
-      );
-    }, baseSpinDuration + 30);
-  }
+function stopInterval(interval) {
+  clearInterval(interval);
+  perkeleIntervals =
+    perkeleIntervals.filter(item => item !== interval);
 }
 
 function finishSlot(
   slot,
-  nameLabel,
+  role,
   finalResult,
   runId,
   isLastSlot
@@ -401,15 +284,103 @@ function finishSlot(
     return;
   }
 
-  nameLabel.textContent = finalResult.name;
+  slot.classList.remove("spinning");
   slot.classList.add("stopped");
 
   if (finalResult.isEmpty) {
     slot.classList.add("empty-result");
   }
 
+  showPerkInSlot(
+    slot,
+    role,
+    finalResult
+  );
+
   if (isLastSlot) {
     finishPerkeleRound(runId);
+  }
+}
+
+function animateSlot({
+  slot,
+  role,
+  perkPool,
+  finalResult,
+  stopDelay,
+  useBetrayal,
+  runId,
+  isLastSlot,
+  index
+}) {
+  const interval =
+    startSlotSpinner(
+      slot,
+      role,
+      perkPool,
+      index
+    );
+
+  if (useBetrayal) {
+    schedulePerkele(() => {
+      if (runId !== perkeleRunId) return;
+
+      stopInterval(interval);
+
+      const tease = {
+        name: randomItem(perkPool),
+        isEmpty: false
+      };
+
+      slot.classList.remove("spinning");
+      slot.classList.add("betrayal-pause");
+
+      showPerkInSlot(
+        slot,
+        role,
+        tease
+      );
+    }, stopDelay);
+
+    schedulePerkele(() => {
+      if (runId !== perkeleRunId) return;
+
+      slot.classList.remove("betrayal-pause");
+      slot.classList.add("betrayal-drop");
+
+      showPerkInSlot(
+        slot,
+        role,
+        finalResult
+      );
+    }, stopDelay + PERKELE_SETTINGS.betrayalPause);
+
+    schedulePerkele(() => {
+      finishSlot(
+        slot,
+        role,
+        finalResult,
+        runId,
+        isLastSlot
+      );
+    },
+    stopDelay +
+    PERKELE_SETTINGS.betrayalPause +
+    320);
+  } else {
+    schedulePerkele(() => {
+      if (runId !== perkeleRunId) return;
+
+      stopInterval(interval);
+
+      finishSlot(
+        slot,
+        role,
+        finalResult,
+        runId,
+        isLastSlot
+      );
+    }, stopDelay);
   }
 }
 
@@ -475,6 +446,36 @@ function hidePerkeleWidget() {
   }, 390);
 }
 
+function showFatalError(error) {
+  console.error("Perkele overlay error:", error);
+
+  const widget =
+    document.getElementById("perkele-widget");
+
+  const roleText =
+    document.getElementById("perkele-role");
+
+  const status =
+    document.getElementById("perkele-status");
+
+  const footer =
+    document.getElementById("perkele-footer");
+
+  widget.classList.remove(
+    "hidden",
+    "widget-exit"
+  );
+
+  roleText.textContent = "PERKELE ERROR";
+  status.textContent =
+    "THE ENTITY ATE THE OVERLAY.";
+
+  footer.textContent =
+    error && error.message
+      ? error.message
+      : "Unknown overlay error.";
+}
+
 async function runPerkele() {
   clearPerkeleTimers();
   perkeleRunId++;
@@ -522,40 +523,46 @@ async function runPerkele() {
         index *
         PERKELE_SETTINGS.delayBetweenStops;
 
-      animateReel({
+      animateSlot({
         slot: slots[index],
         role: CURRENT_ROLE,
         perkPool,
         finalResult: result,
         stopDelay,
         useBetrayal:
-          index === 3 && betrayFinalSlot,
+          index === 3 &&
+          betrayFinalSlot,
         runId,
-        isLastSlot: index === 3
+        isLastSlot:
+          index === 3,
+        index
       });
     });
   } catch (error) {
-    console.error(error);
-
-    const widget =
-      document.getElementById("perkele-widget");
-
-    const roleText =
-      document.getElementById("perkele-role");
-
-    const status =
-      document.getElementById("perkele-status");
-
-    const footer =
-      document.getElementById("perkele-footer");
-
-    widget.classList.remove("hidden");
-    roleText.textContent = "PERKELE ERROR";
-    status.textContent =
-      "THE ENTITY ATE THE PERK LIST.";
-    footer.textContent =
-      "Check the Browser Source URL and try again.";
+    showFatalError(error);
   }
 }
+
+window.addEventListener(
+  "error",
+  event => {
+    showFatalError(
+      event.error ||
+      new Error(event.message)
+    );
+  }
+);
+
+window.addEventListener(
+  "unhandledrejection",
+  event => {
+    const reason =
+      event.reason instanceof Error
+        ? event.reason
+        : new Error(String(event.reason));
+
+    showFatalError(reason);
+  }
+);
 
 runPerkele();

@@ -10,19 +10,13 @@ Public Dead by Daylight perk roulette by PapaThorSwe.
 - Configurable NO PERK chance
 - Generated OBS Browser Source URL
 - Dedicated transparent OBS overlay
-- Reel-style perk roulette animation
+- Robust cycling-style perk roulette animation
 - Staggered slot stops
 - Fourth-slot betrayal fake-out
 - Automatic result text
 - Automatic hide after result display
 - Perk selection encoded into the URL
 - No account, database, or paid backend required
-
-## GitHub Pages
-
-Publish from:
-- Branch: main
-- Folder: / (root)
 
 ## OBS usage
 
@@ -35,18 +29,11 @@ Publish from:
 7. Add it to OBS as a Browser Source.
 8. Refresh that Browser Source whenever you want a new roll.
 
-## Files
+## Version 3.1
 
-- index.html – setup/control page
-- style.css – setup page styling
-- app.js – setup page logic
-- overlay.html – OBS browser source
-- overlay.css – overlay styling
-- overlay.js – roulette logic
-- data/survivor-perks.txt
-- data/killer-perks.txt
+v3.1 replaces the fragile reel-position animation from v3 with a safer
+image-cycling animation. The visual result still behaves like a roulette,
+but no longer depends on measuring and translating a long reel track.
 
-## Note
-
-Perk images are currently loaded from papathorswe.se.
-A later version can move those images into the GitHub repository too.
+It also shows a visible PERKELE ERROR state if the overlay fails, making
+future debugging much easier.
