@@ -9,8 +9,14 @@ Public Dead by Daylight perk roulette by PapaThorSwe.
 - Saved perk ownership selections using browser localStorage
 - Configurable NO PERK chance
 - Generated OBS Browser Source URL
-- OBS overlay automatically rolls on page load / refresh
-- Perk selection is encoded into the URL, so no account or database is required
+- Dedicated transparent OBS overlay
+- Reel-style perk roulette animation
+- Staggered slot stops
+- Fourth-slot betrayal fake-out
+- Automatic result text
+- Automatic hide after result display
+- Perk selection encoded into the URL
+- No account, database, or paid backend required
 
 ## GitHub Pages
 

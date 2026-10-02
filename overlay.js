@@ -1,33 +1,64 @@
-const PERK_LISTS = {
-  survivor: "data/survivor-perks.txt",
-  killer: "data/killer-perks.txt"
-};
+const PERKELE_SETTINGS = {
+  perkLists: {
+    survivor: "data/survivor-perks.txt",
+    killer: "data/killer-perks.txt"
+  },
 
-const IMAGE_FOLDERS = {
-  survivor: "https://papathorswe.se/perks/survivor/",
-  killer: "https://papathorswe.se/perks/killer/"
-};
+  imageFolders: {
+    survivor: "https://papathorswe.se/perks/survivor/",
+    killer: "https://papathorswe.se/perks/killer/"
+  },
 
-const NO_PERK_IMAGE = "https://papathorswe.se/perks/no-perk.png";
+  noPerkImage: "https://papathorswe.se/perks/no-perk.png",
+
+  // Chance that slot 4 fake-outs on a real perk before dropping to NO PERK.
+  betrayalChance: 0.55,
+
+  firstStopDelay: 1750,
+  delayBetweenStops: 470,
+  spinItemCount: 20,
+  betrayalPause: 330,
+
+  // Overlay hides after the completed result has been shown for this long.
+  resultDisplayTime: 18000,
+
+  emptyFooterText: "PERKELE! THE ENTITY TOOK A PERK."
+};
 
 const params = new URLSearchParams(window.location.search);
 
-const role =
+const CURRENT_ROLE =
   params.get("role") === "killer"
     ? "killer"
     : "survivor";
 
-const poolHex = params.get("pool") || "";
-const emptyChance = Math.max(
-  0,
-  Math.min(50, Number(params.get("empty") || 12))
-) / 100;
+const POOL_HEX = params.get("pool") || "";
 
-const widget = document.getElementById("perkeleWidget");
-const roleTitle = document.getElementById("roleTitle");
-const statusText = document.getElementById("statusText");
-const slots = document.getElementById("slots");
-const footerText = document.getElementById("footerText");
+const EMPTY_CHANCE =
+  Math.max(
+    0,
+    Math.min(50, Number(params.get("empty") || 12))
+  ) / 100;
+
+let perkeleRunId = 0;
+let perkeleHideTimer = null;
+let perkeleTimeouts = [];
+
+function clearPerkeleTimers() {
+  perkeleTimeouts.forEach(timer => clearTimeout(timer));
+  perkeleTimeouts = [];
+
+  if (perkeleHideTimer) {
+    clearTimeout(perkeleHideTimer);
+    perkeleHideTimer = null;
+  }
+}
+
+function schedulePerkele(callback, delay) {
+  const timer = setTimeout(callback, delay);
+  perkeleTimeouts.push(timer);
+  return timer;
+}
 
 function parsePerkList(text) {
   return text
@@ -36,11 +67,16 @@ function parsePerkList(text) {
     .filter(line => line && !line.startsWith("#"));
 }
 
-async function loadPerkList() {
-  const response = await fetch(PERK_LISTS[role], { cache: "no-store" });
+async function loadPerkList(role) {
+  const response = await fetch(
+    PERKELE_SETTINGS.perkLists[role],
+    { cache: "no-store" }
+  );
 
   if (!response.ok) {
-    throw new Error("Could not load perk list.");
+    throw new Error(
+      "Could not load " + role + " perk list."
+    );
   }
 
   return parsePerkList(await response.text());
@@ -58,18 +94,15 @@ function perkToFilename(perkName) {
     + ".png";
 }
 
-function decodeSelection(allPerks) {
-  if (!poolHex) return [...allPerks];
+function getPerkImage(role, perkName) {
+  return (
+    PERKELE_SETTINGS.imageFolders[role] +
+    perkToFilename(perkName)
+  );
+}
 
-  let bits = "";
-
-  for (const char of poolHex) {
-    bits += parseInt(char, 16).toString(2).padStart(4, "0");
-  }
-
-  const selected = allPerks.filter((perk, index) => bits[index] === "1");
-
-  return selected.length >= 4 ? selected : [...allPerks];
+function randomItem(items) {
+  return items[Math.floor(Math.random() * items.length)];
 }
 
 function shuffle(items) {
@@ -83,22 +116,48 @@ function shuffle(items) {
   return copy;
 }
 
-function chooseResults(pool) {
-  const available = shuffle(pool);
+function decodeSelection(allPerks) {
+  if (!POOL_HEX) {
+    return [...allPerks];
+  }
+
+  let bits = "";
+
+  for (const char of POOL_HEX) {
+    const value = parseInt(char, 16);
+
+    if (Number.isNaN(value)) {
+      return [...allPerks];
+    }
+
+    bits += value.toString(2).padStart(4, "0");
+  }
+
+  const selected = allPerks.filter(
+    (perk, index) => bits[index] === "1"
+  );
+
+  return selected.length >= 4
+    ? selected
+    : [...allPerks];
+}
+
+function chooseFinalResults(perkPool) {
+  const available = shuffle(perkPool);
   const results = [];
 
-  for (let i = 0; i < 4; i++) {
-    const isEmpty = Math.random() < emptyChance;
+  for (let slot = 0; slot < 4; slot++) {
+    const isEmpty = Math.random() < EMPTY_CHANCE;
 
     if (isEmpty) {
       results.push({
         name: "NO PERK",
-        empty: true
+        isEmpty: true
       });
     } else {
       results.push({
         name: available.pop(),
-        empty: false
+        isEmpty: false
       });
     }
   }
@@ -106,107 +165,397 @@ function chooseResults(pool) {
   return results;
 }
 
-function createSlot() {
-  const slot = document.createElement("div");
-  slot.className = "slot spinning";
+function createReelItem(role, result) {
+  const item = document.createElement("div");
+  item.className = "reel-item";
 
-  const img = document.createElement("img");
-  img.className = "perk-image";
-  img.alt = "";
+  if (result.isEmpty) {
+    item.classList.add("no-perk");
+  }
 
-  const name = document.createElement("div");
-  name.className = "perk-name";
-  name.textContent = "THE ENTITY...";
+  const image = document.createElement("img");
+  image.alt = result.name;
+  image.draggable = false;
 
-  slot.append(img, name);
-  slots.appendChild(slot);
+  image.src = result.isEmpty
+    ? PERKELE_SETTINGS.noPerkImage
+    : getPerkImage(role, result.name);
 
-  return { slot, img, name };
-}
+  image.onerror = function () {
+    console.error(
+      "Could not load perk image:",
+      image.src,
+      "for",
+      result.name
+    );
 
-function showResult(slotData, result) {
-  const { slot, img, name } = slotData;
-
-  slot.classList.remove("spinning");
-  slot.classList.toggle("empty", result.empty);
-
-  img.src = result.empty
-    ? NO_PERK_IMAGE
-    : IMAGE_FOLDERS[role] + perkToFilename(result.name);
-
-  img.onerror = () => {
-    img.style.visibility = "hidden";
+    image.style.visibility = "hidden";
   };
 
-  name.textContent = result.name;
+  item.appendChild(image);
+  return item;
 }
 
-async function run() {
-  try {
-    const allPerks = await loadPerkList();
-    const pool = decodeSelection(allPerks);
-    const finalResults = chooseResults(pool);
+function buildSpinSequence(
+  role,
+  perkPool,
+  finalResult,
+  useBetrayal
+) {
+  const sequence = [];
+  const fillerPool = shuffle(perkPool);
 
-    roleTitle.textContent =
-      role === "killer"
-        ? "KILLER PERKELE"
-        : "SURVIVOR PERKELE";
+  for (
+    let i = 0;
+    i < PERKELE_SETTINGS.spinItemCount;
+    i++
+  ) {
+    sequence.push({
+      name: fillerPool[i % fillerPool.length],
+      isEmpty: false
+    });
+  }
 
-    widget.classList.remove("hidden");
-    widget.classList.add("enter");
-
-    const slotElements = Array.from({ length: 4 }, createSlot);
-
-    const filler = shuffle(pool);
-
-    // Give each slot a short fake cycling effect before it lands.
-    const spinTimers = slotElements.map((slotData, index) => {
-      let tick = 0;
-
-      const interval = setInterval(() => {
-        const perk = filler[(tick + index * 7) % filler.length];
-
-        slotData.img.style.visibility = "visible";
-        slotData.img.src =
-          IMAGE_FOLDERS[role] + perkToFilename(perk);
-        slotData.name.textContent = perk;
-
-        tick++;
-      }, 95);
-
-      return interval;
+  if (useBetrayal) {
+    sequence.push({
+      name: randomItem(perkPool),
+      isEmpty: false,
+      isTease: true
     });
 
-    finalResults.forEach((result, index) => {
-      setTimeout(() => {
-        clearInterval(spinTimers[index]);
-        showResult(slotElements[index], result);
+    sequence.push(finalResult);
+  } else {
+    sequence.push(finalResult);
+  }
 
-        if (index === 3) {
-          const emptyCount = finalResults.filter(x => x.empty).length;
+  return sequence;
+}
 
-          statusText.textContent = "YOUR LOADOUT IS READY";
+function resetSlot(slot) {
+  const track = slot.querySelector(".reel-track");
+  const name = slot.querySelector(".perk-name");
 
-          if (emptyCount === 0) {
-            footerText.textContent = "THE ENTITY WAS STRANGELY GENEROUS.";
-          } else if (emptyCount === 4) {
-            statusText.textContent = "ABSOLUTELY PERKELE";
-            footerText.textContent = "NO PERKS. ONLY VIBES.";
-          } else if (emptyCount === 1) {
-            footerText.textContent = "PERKELE! THE ENTITY TOOK A PERK.";
-          } else {
-            footerText.textContent =
-              `PERKELE! THE ENTITY TOOK ${emptyCount} PERKS.`;
-          }
-        }
-      }, 1500 + index * 480);
-    });
-  } catch (error) {
-    console.error(error);
-    widget.classList.remove("hidden");
-    roleTitle.textContent = "PERKELE ERROR";
-    statusText.textContent = "THE ENTITY ATE THE PERK LIST.";
+  slot.classList.remove(
+    "stopped",
+    "empty-result",
+    "betrayal-pause",
+    "betrayal-drop"
+  );
+
+  track.style.transition = "none";
+  track.style.transform = "translateY(0)";
+  track.innerHTML = "";
+  name.textContent = "";
+}
+
+function setHeader(role) {
+  const widget =
+    document.getElementById("perkele-widget");
+
+  const roleText =
+    document.getElementById("perkele-role");
+
+  const status =
+    document.getElementById("perkele-status");
+
+  const footer =
+    document.getElementById("perkele-footer");
+
+  widget.classList.remove(
+    "hidden",
+    "widget-exit"
+  );
+
+  widget.classList.remove("widget-enter");
+  void widget.offsetWidth;
+  widget.classList.add("widget-enter");
+
+  roleText.textContent =
+    role === "killer"
+      ? "KILLER PERKELE"
+      : "SURVIVOR PERKELE";
+
+  status.textContent = "THE ENTITY IS CHOOSING...";
+  footer.textContent = "";
+}
+
+function animateReel({
+  slot,
+  role,
+  perkPool,
+  finalResult,
+  stopDelay,
+  useBetrayal,
+  runId,
+  isLastSlot
+}) {
+  const track = slot.querySelector(".reel-track");
+  const nameLabel = slot.querySelector(".perk-name");
+
+  const sequence = buildSpinSequence(
+    role,
+    perkPool,
+    finalResult,
+    useBetrayal
+  );
+
+  sequence.forEach(result => {
+    track.appendChild(
+      createReelItem(role, result)
+    );
+  });
+
+  const reelItems =
+    Array.from(
+      track.querySelectorAll(".reel-item")
+    );
+
+  if (reelItems.length !== sequence.length) {
+    console.error(
+      "Could not measure all reel item positions."
+    );
+    return;
+  }
+
+  const finalIndex = sequence.length - 1;
+
+  const teaseIndex = useBetrayal
+    ? sequence.length - 2
+    : finalIndex;
+
+  const finalTarget =
+    -reelItems[finalIndex].offsetTop;
+
+  const teaseTarget =
+    -reelItems[teaseIndex].offsetTop;
+
+  track.style.transition = "none";
+  track.style.transform = "translateY(0)";
+
+  void track.offsetHeight;
+
+  const baseSpinDuration = stopDelay;
+
+  track.style.transition =
+    "transform " +
+    baseSpinDuration +
+    "ms cubic-bezier(.08,.72,.18,1)";
+
+  track.style.transform =
+    "translateY(" + teaseTarget + "px)";
+
+  if (useBetrayal) {
+    schedulePerkele(() => {
+      if (runId !== perkeleRunId) return;
+
+      slot.classList.add("betrayal-pause");
+    }, baseSpinDuration);
+
+    schedulePerkele(() => {
+      if (runId !== perkeleRunId) return;
+
+      slot.classList.remove("betrayal-pause");
+
+      track.style.transition =
+        "transform 280ms cubic-bezier(.2,.8,.25,1.1)";
+
+      track.style.transform =
+        "translateY(" + finalTarget + "px)";
+
+      slot.classList.add("betrayal-drop");
+    }, baseSpinDuration + PERKELE_SETTINGS.betrayalPause);
+
+    schedulePerkele(() => {
+      finishSlot(
+        slot,
+        nameLabel,
+        finalResult,
+        runId,
+        isLastSlot
+      );
+    },
+    baseSpinDuration +
+    PERKELE_SETTINGS.betrayalPause +
+    300);
+  } else {
+    schedulePerkele(() => {
+      finishSlot(
+        slot,
+        nameLabel,
+        finalResult,
+        runId,
+        isLastSlot
+      );
+    }, baseSpinDuration + 30);
   }
 }
 
-run();
+function finishSlot(
+  slot,
+  nameLabel,
+  finalResult,
+  runId,
+  isLastSlot
+) {
+  if (runId !== perkeleRunId) {
+    return;
+  }
+
+  nameLabel.textContent = finalResult.name;
+  slot.classList.add("stopped");
+
+  if (finalResult.isEmpty) {
+    slot.classList.add("empty-result");
+  }
+
+  if (isLastSlot) {
+    finishPerkeleRound(runId);
+  }
+}
+
+function finishPerkeleRound(runId) {
+  if (runId !== perkeleRunId) {
+    return;
+  }
+
+  const status =
+    document.getElementById("perkele-status");
+
+  const footer =
+    document.getElementById("perkele-footer");
+
+  const emptyCount =
+    document.querySelectorAll(
+      ".perk-slot.empty-result"
+    ).length;
+
+  if (emptyCount === 0) {
+    status.textContent = "YOUR LOADOUT IS READY";
+    footer.textContent =
+      "THE ENTITY WAS STRANGELY GENEROUS.";
+  } else if (emptyCount === 4) {
+    status.textContent = "ABSOLUTELY PERKELE";
+    footer.textContent =
+      "NO PERKS. ONLY VIBES.";
+  } else {
+    status.textContent = "YOUR LOADOUT IS READY";
+
+    footer.textContent =
+      emptyCount === 1
+        ? PERKELE_SETTINGS.emptyFooterText
+        : "PERKELE! THE ENTITY TOOK " +
+          emptyCount +
+          " PERKS.";
+  }
+
+  perkeleHideTimer = setTimeout(() => {
+    hidePerkeleWidget();
+  }, PERKELE_SETTINGS.resultDisplayTime);
+}
+
+function hidePerkeleWidget() {
+  clearPerkeleTimers();
+  perkeleRunId++;
+
+  const widget =
+    document.getElementById("perkele-widget");
+
+  if (!widget) return;
+
+  widget.classList.remove("widget-enter");
+  widget.classList.add("widget-exit");
+
+  setTimeout(() => {
+    widget.classList.add("hidden");
+    widget.classList.remove("widget-exit");
+
+    document
+      .querySelectorAll(".perk-slot")
+      .forEach(resetSlot);
+  }, 390);
+}
+
+async function runPerkele() {
+  clearPerkeleTimers();
+  perkeleRunId++;
+
+  const runId = perkeleRunId;
+
+  try {
+    const allPerks =
+      await loadPerkList(CURRENT_ROLE);
+
+    const perkPool =
+      decodeSelection(allPerks);
+
+    if (perkPool.length < 4) {
+      throw new Error(
+        "Perkele requires at least four selected perks."
+      );
+    }
+
+    const slots =
+      Array.from(
+        document.querySelectorAll(".perk-slot")
+      );
+
+    if (slots.length !== 4) {
+      throw new Error(
+        "Perkele requires exactly four perk slots."
+      );
+    }
+
+    setHeader(CURRENT_ROLE);
+    slots.forEach(resetSlot);
+
+    const results =
+      chooseFinalResults(perkPool);
+
+    const betrayFinalSlot =
+      results[3].isEmpty &&
+      Math.random() <
+        PERKELE_SETTINGS.betrayalChance;
+
+    results.forEach((result, index) => {
+      const stopDelay =
+        PERKELE_SETTINGS.firstStopDelay +
+        index *
+        PERKELE_SETTINGS.delayBetweenStops;
+
+      animateReel({
+        slot: slots[index],
+        role: CURRENT_ROLE,
+        perkPool,
+        finalResult: result,
+        stopDelay,
+        useBetrayal:
+          index === 3 && betrayFinalSlot,
+        runId,
+        isLastSlot: index === 3
+      });
+    });
+  } catch (error) {
+    console.error(error);
+
+    const widget =
+      document.getElementById("perkele-widget");
+
+    const roleText =
+      document.getElementById("perkele-role");
+
+    const status =
+      document.getElementById("perkele-status");
+
+    const footer =
+      document.getElementById("perkele-footer");
+
+    widget.classList.remove("hidden");
+    roleText.textContent = "PERKELE ERROR";
+    status.textContent =
+      "THE ENTITY ATE THE PERK LIST.";
+    footer.textContent =
+      "Check the Browser Source URL and try again.";
+  }
+}
+
+runPerkele();

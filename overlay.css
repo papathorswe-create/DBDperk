@@ -17,133 +17,220 @@ body {
   place-items: center;
 }
 
-.widget {
-  width: min(1180px, 94vw);
-  padding: 28px;
-  border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(214, 50, 50, 0.11), transparent 50%),
-    rgba(10, 10, 13, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: white;
+.perkele-widget {
+  width: min(1280px, 94vw);
+  padding: 30px;
+  border-radius: 24px;
+  color: #f5f5f5;
   text-align: center;
-  box-shadow: 0 22px 90px rgba(0, 0, 0, 0.55);
+  background:
+    radial-gradient(circle at top, rgba(214, 50, 50, 0.16), transparent 45%),
+    rgba(8, 8, 12, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.62),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
   transform-origin: center;
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
-.widget.enter {
-  animation: enter 420ms ease-out both;
+.widget-enter {
+  animation: widgetIn 430ms cubic-bezier(.2,.9,.2,1) both;
 }
 
-.header h1 {
-  margin: 2px 0 6px;
-  letter-spacing: 0.06em;
-  font-size: clamp(1.8rem, 4vw, 3.6rem);
+.widget-exit {
+  animation: widgetOut 390ms ease-in both;
 }
 
-.header p {
-  margin: 0 0 22px;
-  color: #b9b9c3;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+.perkele-top {
+  margin-bottom: 22px;
 }
 
-.eyebrow {
+.perkele-eyebrow {
   color: #ff5555;
   font-weight: 900;
-  letter-spacing: 0.3em;
   font-size: 0.78rem;
+  letter-spacing: 0.32em;
 }
 
-.slots {
+#perkele-role {
+  margin: 4px 0 6px;
+  font-size: clamp(2rem, 4.8vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.055em;
+}
+
+#perkele-status {
+  margin: 0;
+  color: #b7b7c2;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.perk-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  gap: 16px;
 }
 
-.slot {
-  min-height: 250px;
+.perk-slot {
+  min-width: 0;
+  padding: 16px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.035);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 18px 12px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018));
   overflow: hidden;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
-.slot.spinning .perk-image {
-  animation: pulse 170ms linear infinite alternate;
+.reel-window {
+  height: 180px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.025);
+  position: relative;
 }
 
-.perk-image {
-  width: min(150px, 80%);
-  aspect-ratio: 1;
+.reel-window::before,
+.reel-window::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 30px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.reel-window::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(8,8,12,0.95), transparent);
+}
+
+.reel-window::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(8,8,12,0.95), transparent);
+}
+
+.reel-track {
+  will-change: transform;
+}
+
+.reel-item {
+  height: 180px;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+}
+
+.reel-item img {
+  width: 142px;
+  height: 142px;
+  max-width: 85%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.48));
+  user-select: none;
 }
 
 .perk-name {
-  min-height: 2.5em;
+  min-height: 48px;
+  margin-top: 12px;
   display: grid;
   place-items: center;
-  font-size: 1rem;
-  font-weight: 800;
+  font-size: 0.98rem;
+  font-weight: 850;
+  line-height: 1.15;
 }
 
-.slot.empty {
-  border-color: rgba(214, 50, 50, 0.7);
-  background: rgba(214, 50, 50, 0.12);
+.perk-slot.stopped {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
 }
 
-.footer {
-  min-height: 1.4em;
-  margin: 20px 0 4px;
+.perk-slot.empty-result {
+  border-color: rgba(214, 50, 50, 0.78);
+  background:
+    linear-gradient(180deg, rgba(214, 50, 50, 0.16), rgba(214, 50, 50, 0.055));
+}
+
+.perk-slot.betrayal-pause {
+  border-color: rgba(255,255,255,0.28);
+  box-shadow: 0 0 30px rgba(255,255,255,0.10);
+}
+
+.perk-slot.betrayal-drop {
+  animation: betrayalFlash 520ms ease-out;
+}
+
+.perkele-footer {
+  min-height: 1.5em;
+  margin-top: 20px;
   font-weight: 900;
-  letter-spacing: 0.06em;
+  font-size: 0.98rem;
+  letter-spacing: 0.07em;
 }
 
-.credit {
-  margin: 0;
-  color: #777784;
+.perkele-credit {
+  margin-top: 8px;
+  color: #747480;
   font-size: 0.72rem;
 }
 
-@keyframes enter {
+@keyframes widgetIn {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(18px);
+    transform: translateY(18px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-@keyframes pulse {
+@keyframes widgetOut {
   from {
-    transform: scale(0.92);
-    opacity: 0.65;
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
   to {
-    transform: scale(1.04);
-    opacity: 1;
+    opacity: 0;
+    transform: translateY(10px) scale(0.975);
   }
 }
 
-@media (max-width: 760px) {
-  .slots {
+@keyframes betrayalFlash {
+  0% {
+    filter: brightness(1);
+  }
+  35% {
+    filter: brightness(1.9);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .perk-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .slot {
-    min-height: 190px;
+  .reel-window,
+  .reel-item {
+    height: 150px;
+  }
+
+  .reel-item img {
+    width: 118px;
+    height: 118px;
   }
 }
