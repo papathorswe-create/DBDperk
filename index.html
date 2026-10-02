@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perkele – DBD Perk Roulette</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">DEAD BY DAYLIGHT</p>
+      <h1>PERKELE</h1>
+      <p class="subtitle">Build your perk pool. Let The Entity ruin it.</p>
+    </header>
+
+    <section class="panel controls">
+      <div class="control-group">
+        <span class="label">Roulette type</span>
+        <div class="segmented" role="group" aria-label="Roulette type">
+          <button id="survivorBtn" class="role-btn active" data-role="survivor">Survivor</button>
+          <button id="killerBtn" class="role-btn" data-role="killer">Killer</button>
+        </div>
+      </div>
+
+      <div class="control-group grow">
+        <label class="label" for="perkSearch">Find perks</label>
+        <input id="perkSearch" type="search" placeholder="Search perks…">
+      </div>
+
+      <div class="control-group">
+        <span class="label">Pool</span>
+        <div class="button-row">
+          <button id="selectAllBtn" class="secondary">Select all</button>
+          <button id="clearAllBtn" class="secondary">Clear all</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel status-panel">
+      <div>
+        <span class="label">Selected</span>
+        <strong id="selectedCount">0</strong>
+      </div>
+      <div>
+        <span class="label">Available</span>
+        <strong id="totalCount">0</strong>
+      </div>
+      <div class="status-note">
+        Your selections are saved in this browser.
+      </div>
+    </section>
+
+    <section class="panel">
+      <div id="perkGrid" class="perk-grid" aria-live="polite"></div>
+      <p id="emptyState" class="empty-state hidden">No perks match that search.</p>
+    </section>
+
+    <section class="roll-zone">
+      <button id="rollBtn" class="roll-btn">ROLL PERKELE</button>
+      <p id="rollHint">Select at least 4 perks.</p>
+
+      <div id="resultPanel" class="result-panel hidden">
+        <p class="result-kicker">THE ENTITY CHOSE</p>
+        <div id="results" class="results"></div>
+      </div>
+    </section>
+
+    <footer>
+      Created by PapaThorSwe
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
