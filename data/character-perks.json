@@ -1,0 +1,888 @@
+{
+  "survivor": [
+    {
+      "name": "Kwon Tae-young",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S52_KwonTae-young_Portrait.png",
+      "perks": [
+        "A Place For Us",
+        "Five Moves Ahead",
+        "Flow State"
+      ]
+    },
+    {
+      "name": "Ace Visconti",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S07_AceVisconti_Portrait.png",
+      "perks": [
+        "Ace in the Hole",
+        "Open-Handed",
+        "Up the Ante"
+      ]
+    },
+    {
+      "name": "Meg Thomas",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S02_MegThomas_Portrait.png",
+      "perks": [
+        "Adrenaline",
+        "Quick & Quiet",
+        "Sprint Burst"
+      ]
+    },
+    {
+      "name": "Jeff Johansen",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S15_JeffJohansen_Portrait.png",
+      "perks": [
+        "Aftercare",
+        "Breakdown",
+        "Distortion"
+      ]
+    },
+    {
+      "name": "Feng Min",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S09_FengMin_Portrait.png",
+      "perks": [
+        "Alert",
+        "Lithe",
+        "Technician"
+      ]
+    },
+    {
+      "name": "Yui Kimura",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S20_YuiKimura_Portrait.png",
+      "perks": [
+        "Any Means Necessary",
+        "Breakout",
+        "Lucky Break"
+      ]
+    },
+    {
+      "name": "Rick Grimes",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S47_RickGrimes_Portrait.png",
+      "perks": [
+        "Apocalyptic Ingenuity",
+        "Come and Get Me!",
+        "Teamwork: Toughen Up"
+      ]
+    },
+    {
+      "name": "Élodie Rakoto",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S24_ElodieRakoto_Portrait.png",
+      "perks": [
+        "Appraisal",
+        "Deception",
+        "Power Struggle"
+      ]
+    },
+    {
+      "name": "Adam Francis",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S14_AdamFrancis_Portrait.png",
+      "perks": [
+        "Autodidact",
+        "Deliverance",
+        "Diversion"
+      ]
+    },
+    {
+      "name": "Steve Harrington",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S19_SteveHarrington_Portrait.png",
+      "perks": [
+        "Babysitter",
+        "Camaraderie",
+        "Second Wind"
+      ]
+    },
+    {
+      "name": "Renato Lyra",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S36_RenatoLyra_Portrait.png",
+      "perks": [
+        "Background Player",
+        "Blood Rush",
+        "Teamwork: Collective Stealth"
+      ]
+    },
+    {
+      "name": "Dustin Henderson",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S50_DustinHenderson_Portrait.png",
+      "perks": [
+        "Bada Bada Boom",
+        "Change of Plan",
+        "Teamwork: Full Circuit"
+      ]
+    },
+    {
+      "name": "Nea Karlsson",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S05_NeaKarlsson_Portrait.png",
+      "perks": [
+        "Balanced Landing",
+        "Streetwise",
+        "Urban Evasion"
+      ]
+    },
+    {
+      "name": "Aestri Yazar & Baermar Uraz",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S42_TheTroupe_Portrait.png",
+      "perks": [
+        "Bardic Inspiration",
+        "Mirrored Illusion",
+        "Still Sight"
+      ]
+    },
+    {
+      "name": "Nancy Wheeler",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S18_NancyWheeler_Portrait.png",
+      "perks": [
+        "Better Together",
+        "Fixated",
+        "Inner Strength"
+      ]
+    },
+    {
+      "name": "Rebecca Chambers",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S33_RebeccaChambers_Portrait.png",
+      "perks": [
+        "Better than New",
+        "Hyperfocus",
+        "Reassurance"
+      ]
+    },
+    {
+      "name": "Leon Scott Kennedy",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S27_LeonScottKennedy_Portrait.png",
+      "perks": [
+        "Bite the Bullet",
+        "Flashbang",
+        "Rookie Spirit"
+      ]
+    },
+    {
+      "name": "Jill Valentine",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S26_JillValentine_Portrait.png",
+      "perks": [
+        "Blast Mine",
+        "Counterforce",
+        "Resurgence"
+      ]
+    },
+    {
+      "name": "Cheryl Mason",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S22_CherylMason_Portrait.png",
+      "perks": [
+        "Blood Pact",
+        "Repressed Alliance",
+        "Soul Guard"
+      ]
+    },
+    {
+      "name": "Kate Denson",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S13_KateDenson_Portrait.png",
+      "perks": [
+        "Boil Over",
+        "Dance With Me",
+        "Windows of Opportunity"
+      ]
+    },
+    {
+      "name": "Dwight Fairfield",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S01_DwightFairfield_Portrait.png",
+      "perks": [
+        "Bond",
+        "Leader",
+        "Prove Thyself"
+      ]
+    },
+    {
+      "name": "Mikaela Reid",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S28_MikaelaReid_Portrait.png",
+      "perks": [
+        "Boon: Circle of Healing",
+        "Boon: Shadow Step",
+        "Clairvoyance"
+      ]
+    },
+    {
+      "name": "Yoichi Asakawa",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S30_YoichiAsakawa_Portrait.png",
+      "perks": [
+        "Boon: Dark Theory",
+        "Empathic Connection",
+        "Parental Guidance"
+      ]
+    },
+    {
+      "name": "Jonah Vasquez",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S29_JonahVasquez_Portrait.png",
+      "perks": [
+        "Boon: Exponential",
+        "Corrective Action",
+        "Overcome"
+      ]
+    },
+    {
+      "name": "Alan Wake",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S40_AlanWake_Portrait.png",
+      "perks": [
+        "Boon: Illumination",
+        "Champion of Light",
+        "Deadline"
+      ]
+    },
+    {
+      "name": "Aurora Stardotter",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S54_AuroraStardotter_Portrait.png",
+      "perks": [
+        "Boon: Steadfast",
+        "Fruits of Your Labor",
+        "Salvation's Cry"
+      ]
+    },
+    {
+      "name": "Bill Overbeck",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S08_BillOverbeck_Portrait.png",
+      "perks": [
+        "Borrowed Time",
+        "Left Behind",
+        "Unbreakable"
+      ]
+    },
+    {
+      "name": "Claudette Morel",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S03_ClaudetteMorel_Portrait.png",
+      "perks": [
+        "Botany Knowledge",
+        "Empathy",
+        "Self-Care"
+      ]
+    },
+    {
+      "name": "Ash Williams",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S17_AshWilliams_Portrait.png",
+      "perks": [
+        "Buckle Up",
+        "Flip-Flop",
+        "Mettle of Man"
+      ]
+    },
+    {
+      "name": "Felix Richter",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S23_FelixRichter_Portrait.png",
+      "perks": [
+        "Built to Last",
+        "Desperate Measures",
+        "Visionary"
+      ]
+    },
+    {
+      "name": "Jake Park",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S04_JakePark_Portrait.png",
+      "perks": [
+        "Calm Spirit",
+        "Iron Will",
+        "Saboteur"
+      ]
+    },
+    {
+      "name": "Ellen Ripley",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S39_EllenRipley_Portrait.png",
+      "perks": [
+        "Chemical Trap",
+        "Light-Footed",
+        "Lucky Star"
+      ]
+    },
+    {
+      "name": "Taurie Cain",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S45_TaurieCain_Portrait.png",
+      "perks": [
+        "Clean Break",
+        "Invocation: Treacherous Crows",
+        "Shoulder the Burden"
+      ]
+    },
+    {
+      "name": "Michonne Grimes",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S48_MichonneGrimes_Portrait.png",
+      "perks": [
+        "Conviction",
+        "Last Stand",
+        "Teamwork: Throw Down"
+      ]
+    },
+    {
+      "name": "Shane Wiigwaas",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S53_ShaneWiigwaas_Portrait.png",
+      "perks": [
+        "Cross-Examination",
+        "Lend a Hand",
+        "Wide Open Throttle"
+      ]
+    },
+    {
+      "name": "Thalita Lyra",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S35_ThalitaLyra_Portrait.png",
+      "perks": [
+        "Cut Loose",
+        "Friendly Competition",
+        "Teamwork: Power of Two"
+      ]
+    },
+    {
+      "name": "David King",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S10_DavidKing_Portrait.png",
+      "perks": [
+        "Dead Hard",
+        "No Mither",
+        "We're Gonna Live Forever"
+      ]
+    },
+    {
+      "name": "David Tapp",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S12_DavidTapp_Portrait.png",
+      "perks": [
+        "Detective's Hunch",
+        "Stake Out",
+        "Tenacity"
+      ]
+    },
+    {
+      "name": "Orela Rose",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S46_OrelaRose_Portrait.png",
+      "perks": [
+        "Do No Harm",
+        "Duty of Care",
+        "Rapid Response"
+      ]
+    },
+    {
+      "name": "Nicolas Cage",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S38_NicolasCage_Portrait.png",
+      "perks": [
+        "Dramaturgy",
+        "Plot Twist",
+        "Scene Partner"
+      ]
+    },
+    {
+      "name": "Eleven",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S51_Eleven_Portrait.png",
+      "perks": [
+        "Extrasensory Perception",
+        "Teamwork: Soft-Spoken",
+        "We See You"
+      ]
+    },
+    {
+      "name": "Trevor Belmont",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S44_TrevorBelmont_Portrait.png",
+      "perks": [
+        "Exultation",
+        "Eyes of Belmont",
+        "Moment of Glory"
+      ]
+    },
+    {
+      "name": "Yun-Jin Lee",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S25_LeeYun-jin_Portrait.png",
+      "perks": [
+        "Fast Track",
+        "Self-Preservation",
+        "Smash Hit"
+      ]
+    },
+    {
+      "name": "Lara Croft",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S43_LaraCroft_Portrait.png",
+      "perks": [
+        "Finesse",
+        "Hardened",
+        "Specialist"
+      ]
+    },
+    {
+      "name": "Vittorio Toscano",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S34_VittorioToscano_Portrait.png",
+      "perks": [
+        "Fogwise",
+        "Potential Energy",
+        "Quick Gambit"
+      ]
+    },
+    {
+      "name": "Zarina Kassir",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S21_ZarinaKassir_Portrait.png",
+      "perks": [
+        "For the People",
+        "Off the Record",
+        "Red Herring"
+      ]
+    },
+    {
+      "name": "Vee Boonyasak",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S49_VeeBoonyasak_Portrait.png",
+      "perks": [
+        "Ghost Notes",
+        "One-Two-Three-Four!",
+        "Road Life"
+      ]
+    },
+    {
+      "name": "Jane Romero",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S16_JaneRomero_Portrait.png",
+      "perks": [
+        "Head On",
+        "Poised",
+        "Solidarity"
+      ]
+    },
+    {
+      "name": "Haddie Kaur",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S31_HaddieKaur_Portrait.png",
+      "perks": [
+        "Inner Focus",
+        "Overzealous",
+        "Residual Manifest"
+      ]
+    },
+    {
+      "name": "Sable Ward",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S41_SableWard_Portrait.png",
+      "perks": [
+        "Invocation: Weaving Spiders",
+        "Strength in Shadows",
+        "Wicked"
+      ]
+    },
+    {
+      "name": "Ada Wong",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S32_AdaWong_Portrait.png",
+      "perks": [
+        "Low Profile",
+        "Reactive Healing",
+        "Wiretap"
+      ]
+    },
+    {
+      "name": "Gabriel Soma",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S37_GabrielSoma_Portrait.png",
+      "perks": [
+        "Made for This",
+        "Scavenger",
+        "Troubleshooter"
+      ]
+    },
+    {
+      "name": "Quentin Smith",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S11_QuentinSmith_Portrait.png",
+      "perks": [
+        "Pharmacy",
+        "Vigil",
+        "Wake Up!"
+      ]
+    },
+    {
+      "name": "Laurie Strode",
+      "portrait": "https://deadbydaylight.wiki.gg/images/S06_LaurieStrode_Portrait.png",
+      "perks": [
+        "Sole Survivor",
+        "Object of Obsession",
+        "Decisive Strike"
+      ]
+    }
+  ],
+  "killer": [
+    {
+      "name": "The Nurse",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K04_TheNurse_Portrait.png",
+      "perks": [
+        "A Nurse's Calling",
+        "Stridor",
+        "Thanatophobia"
+      ]
+    },
+    {
+      "name": "The Trapper",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K01_TheTrapper_Portrait.png",
+      "perks": [
+        "Agitation",
+        "Brutal Strength",
+        "Unnerving Presence"
+      ]
+    },
+    {
+      "name": "The Xenomorph",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K33_TheXenomorph_Portrait.png",
+      "perks": [
+        "Alien Instinct",
+        "Rapid Brutality",
+        "Ultimate Weapon"
+      ]
+    },
+    {
+      "name": "The Houndmaster",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K38_TheHoundmaster_Portrait.png",
+      "perks": [
+        "All-Shaking Thunder",
+        "No Quarter",
+        "Scourge Hook: Jagged Compass"
+      ]
+    },
+    {
+      "name": "The Mastermind",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K29_TheMastermind_Portrait.png",
+      "perks": [
+        "Awakened Awareness",
+        "Superior Anatomy",
+        "Terminus"
+      ]
+    },
+    {
+      "name": "The Clown",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K12_TheClown_Portrait.png",
+      "perks": [
+        "Bamboozle",
+        "Coulrophobia",
+        "Pop Goes the Weasel"
+      ]
+    },
+    {
+      "name": "The Cannibal",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K09_TheCannibal_Portrait.png",
+      "perks": [
+        "Barbecue & Chilli",
+        "Franklin's Demise",
+        "Knock Out"
+      ]
+    },
+    {
+      "name": "The Good Guy",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K34_TheGoodGuy_Portrait.png",
+      "perks": [
+        "Batteries Included",
+        "Friends 'Til the End",
+        "Hex: Two Can Play"
+      ]
+    },
+    {
+      "name": "The Huntress",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K08_TheHuntress_Portrait.png",
+      "perks": [
+        "Beast of Prey",
+        "Hex: Huntress Lullaby",
+        "Territorial Imperative"
+      ]
+    },
+    {
+      "name": "The Oni",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K18_TheOni_Portrait.png",
+      "perks": [
+        "Blood Echo",
+        "Nemesis",
+        "Zanshin Tactics"
+      ]
+    },
+    {
+      "name": "The Nightmare",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K10_TheNightmare_Portrait.png",
+      "perks": [
+        "Blood Warden",
+        "Fire Up",
+        "Remember Me"
+      ]
+    },
+    {
+      "name": "The Wraith",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K02_TheWraith_Portrait.png",
+      "perks": [
+        "Bloodhound",
+        "Predator",
+        "Shadowborn"
+      ]
+    },
+    {
+      "name": "The Onryō",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K27_TheOnryo_Portrait.png",
+      "perks": [
+        "Call of Brine",
+        "Merciless Storm",
+        "Scourge Hook: Floods of Rage"
+      ]
+    },
+    {
+      "name": "The Judgment",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K44_TheJudgment_Portrait.png",
+      "perks": [
+        "Celestial Witness",
+        "Hex: Under Your Thumb",
+        "Lay Waste"
+      ]
+    },
+    {
+      "name": "The Plague",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K15_ThePlague_Portrait.png",
+      "perks": [
+        "Corrupt Intervention",
+        "Dark Devotion",
+        "Infectious Fright"
+      ]
+    },
+    {
+      "name": "The Twins",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K22_TheTwins_Portrait.png",
+      "perks": [
+        "Coup de Grâce",
+        "Hoarder",
+        "Oppression"
+      ]
+    },
+    {
+      "name": "The Demogorgon",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K17_TheDemogorgon_Portrait.png",
+      "perks": [
+        "Cruel Limits",
+        "Mindbreaker",
+        "Surge"
+      ]
+    },
+    {
+      "name": "The Lich",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K36_TheLich_Portrait.png",
+      "perks": [
+        "Dark Arrogance",
+        "Languid Touch",
+        "Weave Attunement"
+      ]
+    },
+    {
+      "name": "The Dredge",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K28_TheDredge_Portrait.png",
+      "perks": [
+        "Darkness Revealed",
+        "Dissolution",
+        "Septic Touch"
+      ]
+    },
+    {
+      "name": "The Deathslinger",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K19_TheDeathslinger_Portrait.png",
+      "perks": [
+        "Dead Man's Switch",
+        "Gearhead",
+        "Hex: Retribution"
+      ]
+    },
+    {
+      "name": "The Executioner",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K20_TheExecutioner_Portrait.png",
+      "perks": [
+        "Deathbound",
+        "Forced Penance",
+        "Trail of Torment"
+      ]
+    },
+    {
+      "name": "The Legion",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K14_TheLegion_Portrait.png",
+      "perks": [
+        "Discordance",
+        "Iron Maiden",
+        "Mad Grit"
+      ]
+    },
+    {
+      "name": "The Dark Lord",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K37_TheDarkLord_Portrait.png",
+      "perks": [
+        "Dominance",
+        "Hex: Wretched Fate",
+        "Human Greed"
+      ]
+    },
+    {
+      "name": "The Blight",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K21_TheBlight_Portrait.png",
+      "perks": [
+        "Dragon's Grip",
+        "Hex: Blood Favour",
+        "Hex: Undying"
+      ]
+    },
+    {
+      "name": "The Hillbilly",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K03_TheHillbilly_Portrait.png",
+      "perks": [
+        "Enduring",
+        "Lightborn",
+        "Tinkerer"
+      ]
+    },
+    {
+      "name": "The Nemesis",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K24_TheNemesis_Portrait.png",
+      "perks": [
+        "Eruption",
+        "Hysteria",
+        "Lethal Pursuer"
+      ]
+    },
+    {
+      "name": "The Singularity",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K32_TheSingularity_Portrait.png",
+      "perks": [
+        "Forced Hesitation",
+        "Genetic Limits",
+        "Machine Learning"
+      ]
+    },
+    {
+      "name": "The Ghoul",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K39_TheGhoul_Portrait.png",
+      "perks": [
+        "Forever Entwined",
+        "Hex: Nothing but Misery",
+        "None Are Free"
+      ]
+    },
+    {
+      "name": "The Ghost Face",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K16_TheGhostFace_Portrait.png",
+      "perks": [
+        "Furtive Chase",
+        "I'm All Ears",
+        "Thrilling Tremors"
+      ]
+    },
+    {
+      "name": "The Skull Merchant",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K31_TheSkullMerchant_Portrait.png",
+      "perks": [
+        "Game Afoot",
+        "Leverage",
+        "THWACK!"
+      ]
+    },
+    {
+      "name": "The Artist",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K26_TheArtist_Portrait.png",
+      "perks": [
+        "Grim Embrace",
+        "Hex: Pentimento",
+        "Scourge Hook: Pain Resonance"
+      ]
+    },
+    {
+      "name": "The Animatronic",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K40_TheAnimatronic_Portrait.png",
+      "perks": [
+        "Haywire",
+        "Help Wanted",
+        "Phantom Fear"
+      ]
+    },
+    {
+      "name": "The Trickster",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K23_TheTrickster_Portrait.png",
+      "perks": [
+        "Hex: Crowd Control",
+        "No Way Out",
+        "Starstruck"
+      ]
+    },
+    {
+      "name": "The Hag",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K06_TheHag_Portrait.png",
+      "perks": [
+        "Hex: Devour Hope",
+        "Hex: Ruin",
+        "Hex: The Third Seal"
+      ]
+    },
+    {
+      "name": "The Knight",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K30_TheKnight_Portrait.png",
+      "perks": [
+        "Hex: Face the Darkness",
+        "Hubris",
+        "Nowhere to Hide"
+      ]
+    },
+    {
+      "name": "The Spirit",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K13_TheSpirit_Portrait.png",
+      "perks": [
+        "Hex: Haunted Ground",
+        "Rancor",
+        "Spirit Fury"
+      ]
+    },
+    {
+      "name": "The First",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K42_TheFirst_Portrait.png",
+      "perks": [
+        "Hex: Hive Mind",
+        "Secret Project",
+        "Turn Back the Clock"
+      ]
+    },
+    {
+      "name": "The Krasue",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K41_TheKrasue_Portrait.png",
+      "perks": [
+        "Hex: Overture of Doom",
+        "Ravenous",
+        "Wandering Eye"
+      ]
+    },
+    {
+      "name": "The Slasher",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K43_TheSlasher_Portrait.png",
+      "perks": [
+        "Hex: Scared to Death",
+        "Rampage",
+        "Silent Shadow"
+      ]
+    },
+    {
+      "name": "The Pig",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K11_ThePig_Portrait.png",
+      "perks": [
+        "Make Your Choice",
+        "Scourge Hook: Hangman's Trick",
+        "Surveillance"
+      ]
+    },
+    {
+      "name": "The Doctor",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K07_TheDoctor_Portrait.png",
+      "perks": [
+        "Monitor & Abuse",
+        "Overcharge",
+        "Overwhelming Presence"
+      ]
+    },
+    {
+      "name": "The Unknown",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K35_TheUnknown_Portrait.png",
+      "perks": [
+        "Unbound",
+        "Undone",
+        "Unforeseen"
+      ]
+    },
+    {
+      "name": "The Shape",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K05_TheShape_Portrait.png",
+      "perks": [
+        "Play with Your Food",
+        "Dying Light",
+        "Save the Best for Last"
+      ]
+    },
+    {
+      "name": "The Cenobite",
+      "portrait": "https://deadbydaylight.wiki.gg/images/K25_TheCenobite_Portrait.png",
+      "perks": [
+        "Deadlock",
+        "Hex: Plaything",
+        "Scourge Hook: Gift of Pain"
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Perkele – DBD Perk Roulette</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=4.1">
 </head>
 <body>
   <main class="shell">
@@ -42,6 +42,48 @@
         </div>
       </div>
     </section>
+
+
+    <details id="characterManager" class="panel character-manager">
+      <summary>
+        <div>
+          <span class="label">Quick perk setup</span>
+          <strong>Manage perks by character</strong>
+        </div>
+        <span class="character-manager-hint">Optional helper</span>
+      </summary>
+
+      <div class="character-manager-body">
+        <div class="character-manager-copy">
+          Toggle a character to enable or disable their three unique perks.
+          You can still change individual perks below afterwards.
+        </div>
+
+        <div class="character-tools">
+          <div class="control-group grow">
+            <label class="label" for="characterSearch">Find characters</label>
+            <input id="characterSearch" type="search" placeholder="Search characters…">
+          </div>
+
+          <div class="control-group">
+            <span class="label">Visible characters</span>
+            <div class="button-row">
+              <button id="enableCharactersBtn" class="secondary" type="button">Enable all</button>
+              <button id="disableCharactersBtn" class="secondary" type="button">Disable all</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="character-status">
+          <span><strong id="fullCharacterCount">0</strong> fully active</span>
+          <span><strong id="partialCharacterCount">0</strong> partial</span>
+          <span><strong id="offCharacterCount">0</strong> off</span>
+        </div>
+
+        <div id="characterGrid" class="character-grid"></div>
+        <p id="characterEmptyState" class="empty-state hidden">No characters match that search.</p>
+      </div>
+    </details>
 
     <section class="panel status-panel">
       <div>
@@ -112,6 +154,6 @@
     </footer>
   </main>
 
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=4.1"></script>
 </body>
 </html>

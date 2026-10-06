@@ -51,3 +51,21 @@ The Available perk count updates automatically from however many lines are in th
 ## TRUE Killer Chaos
 
 Same GitHub Pages project, new mode. Users can select owned Killers with portraits, reuse their saved Killer perk pool, roll a random Killer, four random perks and two valid add-ons, with independent NO PERK and NO ADD-ON chances. The OBS URL encodes the selected Killers, perk pool and both loss chances. Add-on images load from `https://papathorswe.se/killer-addons/<killer>/<addon>.png`.
+
+
+## Character perk manager (v4.1)
+
+The normal individual perk checklist is still the source of truth.
+
+An optional collapsible **Manage perks by character** panel now sits above it:
+
+- Separate character search bar
+- Survivor/Killer character cards with portraits
+- Clicking a character enables/disables that character's three unique perks
+- Character cards show Full / Partial / Off based on the actual perk checkboxes
+- Manual individual perk changes still work exactly as before
+- Partial state means the user has manually enabled only some of a character's perks
+- Enable all / Disable all acts only on the currently visible character search results
+- Character data is stored in `data/character-perks.json`
+
+This makes character ownership a shortcut, not a replacement for individual perk control.

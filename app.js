@@ -1,5 +1,7 @@
 // Perkele setup page - PapaThorSwe
 
+const CHARACTER_DATA_FILE = "data/character-perks.json";
+
 const PERK_LISTS = {
   survivor: {
     primary: "https://papathorswe.se/perks/survivor-perks.txt",
@@ -24,6 +26,11 @@ let currentRole =
     ? requestedRole
     : (localStorage.getItem(STORAGE_KEYS.role) || "survivor");
 let perkData = {
+  survivor: [],
+  killer: []
+};
+
+let characterData = {
   survivor: [],
   killer: []
 };
@@ -53,6 +60,14 @@ const previewBtn = document.getElementById("previewBtn");
 const urlBox = document.getElementById("urlBox");
 const obsUrl = document.getElementById("obsUrl");
 const copyUrlBtn = document.getElementById("copyUrlBtn");
+const characterSearch = document.getElementById("characterSearch");
+const characterGrid = document.getElementById("characterGrid");
+const characterEmptyState = document.getElementById("characterEmptyState");
+const enableCharactersBtn = document.getElementById("enableCharactersBtn");
+const disableCharactersBtn = document.getElementById("disableCharactersBtn");
+const fullCharacterCount = document.getElementById("fullCharacterCount");
+const partialCharacterCount = document.getElementById("partialCharacterCount");
+const offCharacterCount = document.getElementById("offCharacterCount");
 
 function parsePerkList(text) {
   return text
@@ -84,6 +99,190 @@ async function loadPerkList(role) {
   }
 
   throw new Error(`Could not load ${role} perk list.`);
+}
+
+
+function normalisePerkName(value) {
+  return String(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+function resolveCharacterPerks(role, character) {
+  const byNormalisedName = new Map(
+    perkData[role].map(perk => [normalisePerkName(perk), perk])
+  );
+
+  const aliases = {
+    "hexnothingbutmisery": "nothingbutmisery"
+  };
+
+  return character.perks
+    .map(perk => {
+      const key = normalisePerkName(perk);
+
+      if (byNormalisedName.has(key)) {
+        return byNormalisedName.get(key);
+      }
+
+      const aliasKey = aliases[key];
+      return aliasKey && byNormalisedName.has(aliasKey)
+        ? byNormalisedName.get(aliasKey)
+        : null;
+    })
+    .filter(Boolean);
+}
+
+function getCharacterState(role, character) {
+  const availablePerks = resolveCharacterPerks(role, character);
+  const active = availablePerks.filter(perk => selected[role].has(perk)).length;
+
+  if (availablePerks.length === 0 || active === 0) {
+    return {
+      state: "off",
+      active,
+      total: availablePerks.length
+    };
+  }
+
+  if (active === availablePerks.length) {
+    return {
+      state: "full",
+      active,
+      total: availablePerks.length
+    };
+  }
+
+  return {
+    state: "partial",
+    active,
+    total: availablePerks.length
+  };
+}
+
+function toggleCharacter(role, character) {
+  const perks = resolveCharacterPerks(role, character);
+  if (!perks.length) return;
+
+  const allOn = perks.every(perk => selected[role].has(perk));
+
+  perks.forEach(perk => {
+    if (allOn) {
+      selected[role].delete(perk);
+    } else {
+      selected[role].add(perk);
+    }
+  });
+
+  saveSelections(role);
+  urlBox.classList.add("hidden");
+  renderPerks();
+  renderCharacters();
+}
+
+function renderCharacters() {
+  if (!characterGrid) return;
+
+  const query = characterSearch.value.trim().toLowerCase();
+
+  const visible = characterData[currentRole].filter(character =>
+    character.name.toLowerCase().includes(query)
+  );
+
+  characterGrid.innerHTML = "";
+
+  let full = 0;
+  let partial = 0;
+  let off = 0;
+
+  characterData[currentRole].forEach(character => {
+    const { state } = getCharacterState(currentRole, character);
+
+    if (state === "full") full++;
+    else if (state === "partial") partial++;
+    else off++;
+  });
+
+  fullCharacterCount.textContent = full;
+  partialCharacterCount.textContent = partial;
+  offCharacterCount.textContent = off;
+
+  visible.forEach(character => {
+    const info = getCharacterState(currentRole, character);
+
+    const label = document.createElement("label");
+    label.className = `character-card ${info.state}`;
+    label.title = character.perks.join("\\n");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = info.state === "full";
+    checkbox.indeterminate = info.state === "partial";
+    checkbox.disabled = info.total === 0;
+
+    checkbox.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleCharacter(currentRole, character);
+    });
+
+    const image = document.createElement("img");
+    image.className = "character-portrait";
+    image.src = character.portrait;
+    image.alt = character.name;
+    image.loading = "lazy";
+
+    const copy = document.createElement("div");
+    copy.className = "character-card-copy";
+
+    const name = document.createElement("span");
+    name.className = "character-card-name";
+    name.textContent = character.name;
+
+    const state = document.createElement("span");
+    state.className = "character-card-state";
+
+    if (info.total === 0) {
+      state.textContent = "Perks not in current list";
+    } else if (info.state === "partial") {
+      state.textContent = `${info.active}/${info.total} perks active · PARTIAL`;
+    } else {
+      state.textContent = `${info.active}/${info.total} perks active`;
+    }
+
+    copy.append(name, state);
+    label.append(checkbox, image, copy);
+
+    label.addEventListener("click", event => {
+      if (event.target === checkbox) return;
+      event.preventDefault();
+      toggleCharacter(currentRole, character);
+    });
+
+    characterGrid.appendChild(label);
+  });
+
+  characterEmptyState.classList.toggle("hidden", visible.length !== 0);
+}
+
+function setVisibleCharacters(enabled) {
+  const query = characterSearch.value.trim().toLowerCase();
+
+  characterData[currentRole]
+    .filter(character => character.name.toLowerCase().includes(query))
+    .forEach(character => {
+      resolveCharacterPerks(currentRole, character).forEach(perk => {
+        if (enabled) selected[currentRole].add(perk);
+        else selected[currentRole].delete(perk);
+      });
+    });
+
+  saveSelections(currentRole);
+  urlBox.classList.add("hidden");
+  renderPerks();
+  renderCharacters();
 }
 
 function loadSavedSelections(role) {
@@ -119,10 +318,12 @@ function setRole(role) {
   currentRole = role;
   localStorage.setItem(STORAGE_KEYS.role, role);
   perkSearch.value = "";
+  characterSearch.value = "";
   resultPanel.classList.add("hidden");
   urlBox.classList.add("hidden");
   updateRoleButtons();
   renderPerks();
+  renderCharacters();
 }
 
 function updateCounts() {
@@ -175,6 +376,7 @@ function renderPerks() {
       saveSelections(currentRole);
       urlBox.classList.add("hidden");
       updateCounts();
+      renderCharacters();
     });
 
     label.append(checkbox, name);
@@ -305,9 +507,16 @@ function setupEmptyChance() {
 
 async function initialise() {
   try {
-    [perkData.survivor, perkData.killer] = await Promise.all([
+    const characterResponse = await fetch(CHARACTER_DATA_FILE, { cache: "no-store" });
+
+    if (!characterResponse.ok) {
+      throw new Error("Could not load character perk data.");
+    }
+
+    [perkData.survivor, perkData.killer, characterData] = await Promise.all([
       loadPerkList("survivor"),
-      loadPerkList("killer")
+      loadPerkList("killer"),
+      characterResponse.json()
     ]);
 
     loadSavedSelections("survivor");
@@ -316,6 +525,7 @@ async function initialise() {
     setupEmptyChance();
     updateRoleButtons();
     renderPerks();
+    renderCharacters();
   } catch (error) {
     console.error(error);
     perkGrid.innerHTML =
@@ -335,5 +545,8 @@ rollBtn.addEventListener("click", rollPerkele);
 generateUrlBtn.addEventListener("click", generateOverlayUrl);
 previewBtn.addEventListener("click", previewOverlay);
 copyUrlBtn.addEventListener("click", copyOverlayUrl);
+characterSearch.addEventListener("input", renderCharacters);
+enableCharactersBtn.addEventListener("click", () => setVisibleCharacters(true));
+disableCharactersBtn.addEventListener("click", () => setVisibleCharacters(false));
 
 initialise();
