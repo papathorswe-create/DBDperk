@@ -113,3 +113,22 @@ Domain-first files:
 
 A `SERVER-DATA-UPLOAD` folder is included with the three JSON files ready
 to upload to `/perks/` on papathorswe.se.
+
+
+## v4.4 - Ghoul perk duplicate fix
+
+Removed the legacy duplicate `Nothing But Misery`.
+
+The only valid entry is now:
+
+`Hex: Nothing but Misery`
+
+Also update the live domain file:
+
+`https://papathorswe.se/perks/killer-perks.txt`
+
+Remove:
+`Nothing But Misery`
+
+Keep:
+`Hex: Nothing but Misery`

@@ -88,7 +88,6 @@ Nemesis
 No Quarter
 No Way Out
 None Are Free
-Nothing But Misery
 Nowhere to Hide
 Oppression
 Overcharge
@@ -143,3 +142,4 @@ Zanshin Tactics
 Celestial Witness
 Hex: Under Your Thumb
 Lay Waste
+Hex: Nothing but Misery
