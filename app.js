@@ -1,6 +1,9 @@
 // Perkele setup page - PapaThorSwe
 
-const CHARACTER_DATA_FILE = "data/character-perks.json";
+const CHARACTER_DATA_FILES = [
+  "https://papathorswe.se/perks/character-perks.json",
+  "data/character-perks.json"
+];
 
 const PERK_LISTS = {
   survivor: {
@@ -69,6 +72,23 @@ const fullCharacterCount = document.getElementById("fullCharacterCount");
 const partialCharacterCount = document.getElementById("partialCharacterCount");
 const offCharacterCount = document.getElementById("offCharacterCount");
 
+
+async function loadJsonFromSources(sources, label) {
+  for (const source of sources) {
+    try {
+      const response = await fetch(source, { cache: "no-store" });
+
+      if (!response.ok) continue;
+
+      return await response.json();
+    } catch (error) {
+      console.warn(`Could not load ${label} from:`, source);
+    }
+  }
+
+  throw new Error(`Could not load ${label}.`);
+}
+
 function parsePerkList(text) {
   return text
     .split(/\r?\n/)
@@ -108,6 +128,25 @@ function normalisePerkName(value) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "");
+}
+
+
+function mergeMappedPerks(role, perks, mappedCharacters) {
+  const result = [...perks];
+  const seen = new Set(perks.map(normalisePerkName));
+
+  (mappedCharacters || []).forEach(character => {
+    character.perks.forEach(perk => {
+      const key = normalisePerkName(perk);
+
+      if (!seen.has(key)) {
+        result.push(perk);
+        seen.add(key);
+      }
+    });
+  });
+
+  return result;
 }
 
 function resolveCharacterPerks(role, character) {
@@ -507,17 +546,26 @@ function setupEmptyChance() {
 
 async function initialise() {
   try {
-    const characterResponse = await fetch(CHARACTER_DATA_FILE, { cache: "no-store" });
-
-    if (!characterResponse.ok) {
-      throw new Error("Could not load character perk data.");
-    }
-
     [perkData.survivor, perkData.killer, characterData] = await Promise.all([
       loadPerkList("survivor"),
       loadPerkList("killer"),
-      characterResponse.json()
+      loadJsonFromSources(
+        CHARACTER_DATA_FILES,
+        "character perk data"
+      )
     ]);
+
+    perkData.survivor = mergeMappedPerks(
+      "survivor",
+      perkData.survivor,
+      characterData.survivor
+    );
+
+    perkData.killer = mergeMappedPerks(
+      "killer",
+      perkData.killer,
+      characterData.killer
+    );
 
     loadSavedSelections("survivor");
     loadSavedSelections("killer");

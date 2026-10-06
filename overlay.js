@@ -17,6 +17,11 @@ const PERKELE_SETTINGS = {
     killer: "https://papathorswe.se/perks/killer/"
   },
 
+  characterDataFiles: [
+    "https://papathorswe.se/perks/character-perks.json",
+    "data/character-perks.json"
+  ],
+
   noPerkImage: "https://papathorswe.se/perks/no-perk.png",
 
   betrayalChance: 0.55,
@@ -68,6 +73,50 @@ function schedulePerkele(callback, delay) {
   const timer = setTimeout(callback, delay);
   perkeleTimeouts.push(timer);
   return timer;
+}
+
+
+
+async function loadJsonFromSources(sources, label) {
+  for (const source of sources) {
+    try {
+      const response = await fetch(source, { cache: "no-store" });
+
+      if (!response.ok) continue;
+
+      return await response.json();
+    } catch (error) {
+      console.warn(`Could not load ${label} from:`, source);
+    }
+  }
+
+  throw new Error(`Could not load ${label}.`);
+}
+
+function normalisePerkName(value) {
+  return String(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+function mergeMappedPerks(perks, mappedCharacters) {
+  const result = [...perks];
+  const seen = new Set(perks.map(normalisePerkName));
+
+  (mappedCharacters || []).forEach(character => {
+    character.perks.forEach(perk => {
+      const key = normalisePerkName(perk);
+
+      if (!seen.has(key)) {
+        result.push(perk);
+        seen.add(key);
+      }
+    });
+  });
+
+  return result;
 }
 
 function parsePerkList(text) {
@@ -501,8 +550,18 @@ async function runPerkele() {
   const runId = perkeleRunId;
 
   try {
-    const allPerks =
-      await loadPerkList(CURRENT_ROLE);
+    const [loadedPerks, mappedCharacters] = await Promise.all([
+      loadPerkList(CURRENT_ROLE),
+      loadJsonFromSources(
+        PERKELE_SETTINGS.characterDataFiles,
+        "character perk data"
+      )
+    ]);
+
+    const allPerks = mergeMappedPerks(
+      loadedPerks,
+      mappedCharacters[CURRENT_ROLE]
+    );
 
     const perkPool =
       decodeSelection(allPerks);

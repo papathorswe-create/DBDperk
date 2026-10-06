@@ -69,3 +69,47 @@ An optional collapsible **Manage perks by character** panel now sits above it:
 - Character data is stored in `data/character-perks.json`
 
 This makes character ownership a shortcut, not a replacement for individual perk control.
+
+
+## v4.2 Aurora / Judgment fix
+
+Aurora Stardotter and The Judgment were present in the character mapping,
+but their six new unique perks were missing from the perk TXT files used by
+the roulette. That made the character manager unable to connect them to an
+active perk pool.
+
+v4.2 fixes this in two ways:
+
+- Adds Aurora's and Judgment's perks to the bundled fallback TXT files.
+- Merges mapped character perks into the loaded pool at runtime, so a stale
+  hosted TXT file will not hide a newly mapped character's perks.
+
+For clean maintenance, also add these lines to the hosted TXT files on
+papathorswe.se:
+
+Survivor:
+Boon: Steadfast
+Fruits of Your Labor
+Salvation's Cry
+
+Killer:
+Celestial Witness
+Hex: Under Your Thumb
+Lay Waste
+
+
+## v4.3 - Domain-first live game data
+
+Perkele now loads live game data from `papathorswe.se` first and uses the
+GitHub copies only as fallbacks.
+
+Domain-first files:
+
+- `https://papathorswe.se/perks/survivor-perks.txt`
+- `https://papathorswe.se/perks/killer-perks.txt`
+- `https://papathorswe.se/perks/character-perks.json`
+- `https://papathorswe.se/perks/killers.json`
+- `https://papathorswe.se/perks/killer-addons.json`
+
+A `SERVER-DATA-UPLOAD` folder is included with the three JSON files ready
+to upload to `/perks/` on papathorswe.se.
