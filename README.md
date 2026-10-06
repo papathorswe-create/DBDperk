@@ -46,3 +46,8 @@ If those cannot be reached, it falls back to the copies in the GitHub repo.
 
 So normally, adding new perks to the two TXT files on papathorswe.se is enough.
 The Available perk count updates automatically from however many lines are in the list.
+
+
+## TRUE Killer Chaos
+
+Same GitHub Pages project, new mode. Users can select owned Killers with portraits, reuse their saved Killer perk pool, roll a random Killer, four random perks and two valid add-ons, with independent NO PERK and NO ADD-ON chances. The OBS URL encodes the selected Killers, perk pool and both loss chances. Add-on images load from `https://papathorswe.se/killer-addons/<killer>/<addon>.png`.

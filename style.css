@@ -359,3 +359,6 @@ footer {
     flex-direction: column;
   }
 }
+
+
+.mode-nav{display:flex;justify-content:center;gap:10px;margin:0 0 18px;flex-wrap:wrap}.mode-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border:1px solid var(--line);border-radius:999px;background:rgba(19,19,25,.82);color:var(--muted);font-size:.78rem;font-weight:900;letter-spacing:.09em;text-decoration:none}.mode-link:hover{color:var(--text);border-color:#515160}.mode-link.active{color:white;border-color:var(--accent);background:rgba(214,50,50,.18)}.mode-link.chaos-link:not(.active){border-color:rgba(214,50,50,.45)}

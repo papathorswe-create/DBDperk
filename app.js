@@ -18,7 +18,11 @@ const STORAGE_KEYS = {
   emptyChance: "perkele-empty-chance"
 };
 
-let currentRole = localStorage.getItem(STORAGE_KEYS.role) || "survivor";
+const requestedRole = new URLSearchParams(window.location.search).get("role");
+let currentRole =
+  requestedRole === "killer" || requestedRole === "survivor"
+    ? requestedRole
+    : (localStorage.getItem(STORAGE_KEYS.role) || "survivor");
 let perkData = {
   survivor: [],
   killer: []
