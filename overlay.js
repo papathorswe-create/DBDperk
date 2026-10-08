@@ -1,5 +1,24 @@
 // Perkele OBS overlay - PapaThorSwe
 
+
+const OVERLAY_DESIGN_WIDTH = 1280;
+const OVERLAY_DESIGN_HEIGHT = 720;
+
+function fitOverlayToBrowserSource() {
+  const scale = Math.min(
+    window.innerWidth / OVERLAY_DESIGN_WIDTH,
+    window.innerHeight / OVERLAY_DESIGN_HEIGHT
+  );
+
+  document.documentElement.style.setProperty(
+    "--overlay-scale",
+    String(scale)
+  );
+}
+
+window.addEventListener("resize", fitOverlayToBrowserSource);
+fitOverlayToBrowserSource();
+
 const PERKELE_SETTINGS = {
   perkLists: {
     survivor: {

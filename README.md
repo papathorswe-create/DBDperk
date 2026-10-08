@@ -132,3 +132,21 @@ Remove:
 
 Keep:
 `Hex: Nothing but Misery`
+
+
+## v4.5 - Fixed OBS overlay ratio
+
+Both OBS overlays now use a fixed 1280×720 (16:9) design canvas.
+
+The canvas scales uniformly to fit whatever Browser Source size OBS is using.
+For example, the default 800×800 Browser Source will show the widget at
+800×450 centered inside the source instead of triggering a different mobile
+layout.
+
+This also removes the old viewport breakpoint that changed the perk layout
+from four columns to two columns when the Browser Source width dropped below
+900px.
+
+Recommended OBS Browser Source size is still 1280×720 or 1920×1080, but the
+widget now keeps the same layout and aspect ratio even if a streamer leaves
+OBS at its default 800×800.
