@@ -2,7 +2,7 @@
 
 
 const OVERLAY_DESIGN_WIDTH = 1280;
-const OVERLAY_DESIGN_HEIGHT = 720;
+const OVERLAY_DESIGN_HEIGHT = 960;
 
 function fitOverlayToBrowserSource() {
   const scale = Math.min(

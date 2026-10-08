@@ -21,7 +21,7 @@ body {
   left: 50%;
   top: 50%;
   width: 1280px;
-  height: 720px;
+  height: 960px;
   display: grid;
   place-items: center;
   transform-origin: center center;

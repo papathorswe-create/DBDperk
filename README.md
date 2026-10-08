@@ -150,3 +150,22 @@ from four columns to two columns when the Browser Source width dropped below
 Recommended OBS Browser Source size is still 1280×720 or 1920×1080, but the
 widget now keeps the same layout and aspect ratio even if a streamer leaves
 OBS at its default 800×800.
+
+
+## v4.6 - OBS default 4:3 canvas
+
+The OBS Browser Source default is 800×600, so both overlays now use a
+1280×960 virtual design canvas (4:3).
+
+Why 1280×960 instead of literally designing at 800×600?
+
+- It keeps enough internal room for the four perk cards and Killer Chaos.
+- At OBS's default 800×600 it scales down exactly to 800×600.
+- At 1920×1080 it scales uniformly to 1440×1080 and stays centered.
+- Nothing changes layout based on viewport width.
+- No part of the widget should be clipped just because the Browser Source
+  uses a different resolution.
+
+The transparent space on the left/right at 16:9 resolutions is intentional.
+OBS can position/crop the source however the streamer wants without the
+widget itself changing shape.
